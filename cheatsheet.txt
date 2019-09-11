@@ -1,0 +1,42 @@
+#You are here:
+https://learn.hashicorp.com/terraform/gcp/dependencies
+
+#################
+#####INFO########
+#################
+
+Terraform loads all configuration from the current directory when it is invoked.
+    - Terraform looks for files ending in *.tf and *.tf.json when invoked
+
+#################
+#####FILE########
+#################
+
+(File)
+terraform.tfstate
+    - keeps a track of all resources deployed and managed by Terraform. 
+    - Keep state REMOTE and not in source (https://www.terraform.io/docs/state/remote.html)
+    - You should use BACKENDS to store state (https://www.terraform.io/docs/backends/)
+
+################
+#####CMD########
+################
+
+##fmt the code to align to the std style
+terraform fmt
+
+##Initializes local settings and data. Do this when:
+    - Pulling down a fresh REPO
+    - Making significant code changes
+    - Modifying variables
+##It will pull down necessary providers locally and add them to the local .terraform directory
+terraform init
+
+##Test code against destination infrastructure and provider a list of what will be created / modified / deleted
+terraform plan
+
+#Show the state of what has been deployed (Inspect Terraform state or plan)
+terraform show
+
+#Destroy all known infrastructure (Destroy Terraform-managed infrastructure)
+terraform destroy
