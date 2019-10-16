@@ -8,15 +8,34 @@ https://learn.hashicorp.com/terraform/gcp/dependencies
 Terraform loads all configuration from the current directory when it is invoked.
     - Terraform looks for files ending in *.tf and *.tf.json when invoked
 
+To see what available values you can query from a created resource you check data sources.
+    - Think of datasources as available outputs
+
+Implicit dependencies
+    - Implicit dependencies are inferred by nesting resources inside one another (Terraform knows dependency order when you do this)
+        - i.e. create a VPC then reference your VPC in the creation of a resource - terraform can handle this
+    - Explicit dependencies are when you need to reference a "depends_on" inside your resource declaration
+    
+Provisioners run when a resource is created OR destroyed
+    - If you add it to the code afterwards it will not run
+
+
+
 #################
 #####FILE########
 #################
 
-(File)
 terraform.tfstate
     - keeps a track of all resources deployed and managed by Terraform. 
     - Keep state REMOTE and not in source (https://www.terraform.io/docs/state/remote.html)
     - You should use BACKENDS to store state (https://www.terraform.io/docs/backends/)
+
+variables.tf
+    - Keep a reference of all variables
+    - Variable values are not to be set here, mainly declared (defaults can be declarded)
+
+terraform.tfvars
+    - This is where you put in the actual values for the variables
 
 ################
 #####CMD########
@@ -32,11 +51,34 @@ terraform fmt
 ##It will pull down necessary providers locally and add them to the local .terraform directory
 terraform init
 
+#terraform validate, used to validate configuration files
+terraform validate
+
+
 ##Test code against destination infrastructure and provider a list of what will be created / modified / deleted
 terraform plan
+
+#apply a plan (applys all current .tf files)
+terraform apply
+
+#apply a plan with custom variables
+terraform apply -var 'project=<PROJECT_ID>'
 
 #Show the state of what has been deployed (Inspect Terraform state or plan)
 terraform show
 
 #Destroy all known infrastructure (Destroy Terraform-managed infrastructure)
 terraform destroy
+
+#Save a plan
+terraform plan -out static_ip
+
+#Run a saved plan
+terraform apply "static_ip"
+
+#You can taint a resource so it is marked for rebuild at next deployment, simply reference the resource from the terraform script
+terraform taint google_compute_instance.example11
+
+#You can then untaint it
+terraform untains google_compute_instance.example11
+
