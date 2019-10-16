@@ -64,6 +64,14 @@ terraform apply
 #apply a plan with custom variables
 terraform apply -var 'project=<PROJECT_ID>'
 
+#apply a plan with variable files
+terraform apply -var-file="secret.tfvars" -var-file="production.tfvars"
+
+#You can set variables for plans using environment variables - example below sets the variable "credentials_file"
+export TF_VAR_credentials_file=howdydoo
+#Unset it with
+unset TF_VAR_credentials_file
+
 #Show the state of what has been deployed (Inspect Terraform state or plan)
 terraform show
 

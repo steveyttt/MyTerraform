@@ -5,11 +5,8 @@
 #Google Provider - proper reference https://www.terraform.io/docs/providers/google/provider_reference.html
 provider "google" {
   #Handle credentials better here - https://www.terraform.io/docs/providers/google/provider_reference.html#credentials-1
-  # credentials = file("gcp-personal-test-241601-4ba9abd9b6f7.json")
   credentials = var.credentials_file
 
-  # project = "gcp-personal-test-241601"
-  # implemented now using vars
   project = var.project
   region  = var.region
   zone    = "australia-southeast1-b"
@@ -26,13 +23,13 @@ resource "google_compute_network" "vpc_network" {
 resource "google_compute_instance" "example11" {
   #name must be of regex - '(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?)'
   name         = "example-instance11"
-  machine_type = "f1-micro"
+  machine_type = var.machine_types[var.environment]
   tags         = ["personal", "test"]
 
   boot_disk {
     initialize_params {
-      image = "cos-cloud/cos-stable"
       #Test updating the image in place and watch the resource get nuked and rebuilt
+      image = "cos-cloud/cos-stable"
       # image = "debian-cloud/debian-9"
     }
   }
